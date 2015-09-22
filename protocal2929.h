@@ -100,6 +100,17 @@ typedef struct {
   unsigned char response_answer_cmd;
 } gps_info;
 
+typedef struct {
+  unsigned char country_code[4];
+  unsigned char mobile_code[4];
+  unsigned char base_count;
+} AGPS_info;
+
+typedef struct {
+  unsigned char lacN[2];
+  unsigned char cellN[2];
+  unsigned char signalN;
+} cell_info;
 
 
 
@@ -202,7 +213,13 @@ typedef struct {
 
 #pragma pack()
 
+unsigned int get_product_id(unsigned char * terminal_id );
+unsigned char * get_terminal_id( unsigned int product_id );
+unsigned char check_xor(unsigned char * message,int length);
+double bcd2longitude(unsigned char* bcd, unsigned char* longitude_latitude);
 
+double bcd2longitude1(unsigned char* bcd);
+unsigned char * get_gps_time(unsigned char* bcd, unsigned char* timegps);
 
 
 #endif

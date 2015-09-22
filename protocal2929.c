@@ -39,29 +39,34 @@ unsigned char check_xor(unsigned char * message,int length)
 
 //压缩BCD 经纬度转化
 
-unsigned char longitude_latitude[10];
 
-unsigned char * bcd2longitude(unsigned char* bcd, unsigned char* longitude_latitude)
+double bcd2longitude(unsigned char* bcd, unsigned char* longitude_latitude)
 {
-	int num = 0;
-	if (((*(bcd) & 0xF0) >>4) >= 8) 
-	{
-		num = (((*(bcd) & 0xF0) >>4) - 8) * 100;
-		//值为负
-	}
-	else {
-		num = (((*(bcd) & 0xF0) >>4) ) * 100;
-	}
-	num += (*bcd & 0x0F) * 10 + ((*(bcd+1) & 0xF0) >>4);
-	int point = ((*(bcd+1) & 0x0F) *10000);
-	point += ((*(bcd+2) & 0xF0) >>4) *1000;
-	point += ((*(bcd+2) & 0x0F) *100);
-	point += ((*(bcd+3) & 0xF0) >>4) *10;
-	point += (*(bcd+3) & 0x0F);
+    int num = 0;
+    double du;
+    if (((*(bcd) & 0xF0) >>4) >= 8) 
+    {
+        num = (((*(bcd) & 0xF0) >>4) - 8) * 100;
+        //值为负
+    }
+    else {
+        num = (((*(bcd) & 0xF0) >>4) ) * 100;
+    }
+    num += (*bcd & 0x0F) * 10 + ((*(bcd+1) & 0xF0) >>4);
+    int point = ((*(bcd+1) & 0x0F) *10000);
+    point += ((*(bcd+2) & 0xF0) >>4) *1000;
+    point += ((*(bcd+2) & 0x0F) *100);
+    point += ((*(bcd+3) & 0xF0) >>4) *10;
+    point += (*(bcd+3) & 0x0F);
 
-	sprintf(longitude_latitude,"%d.%05d",num, point);
-	return longitude_latitude;
+    sprintf(longitude_latitude,"%d.%05d",num, point);
+
+    du = (double)num + ((double)point)/1000/60;
+
+    return du;
+    
 }
+
 
 
 unsigned char * get_gps_time(unsigned char* bcd, unsigned char* timegps)
