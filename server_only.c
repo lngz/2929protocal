@@ -75,6 +75,9 @@ void func_for_eve1(int x, short int y, void *pargs)
 		printf("error occured while receivingn");
 	}
 	dump_proc (aReqBuffer,nByte) ;
+	if (g_count == 1){
+		sleep(10);
+	}
 	if (( sendto(x, aReqBuffer, nByte, 0,
 		(struct sockaddr *)&stFromAddr, unFromAddrLen)) == -1)
 	{

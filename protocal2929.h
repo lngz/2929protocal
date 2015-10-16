@@ -56,17 +56,27 @@ typedef struct {
   unsigned short length;
 } data_frame_head;
 
+typedef struct {
+  unsigned char data_head[2];
+  unsigned char cmd;
+  unsigned short length;
+  unsigned char terminal_id[4];
+
+} head;
+
+
+typedef struct 
+{ 
+  unsigned char xor_check;
+  unsigned char tail;
+
+} data_frame_tail;
+
+
 #pragma pack()
 
 unsigned int get_product_id(unsigned char * terminal_id );
 unsigned char * get_terminal_id( unsigned int product_id );
-
-typedef struct 
-{	
-  unsigned char xor_check;
-  unsigned char date_tail;
-
-} data_frame_tail;
 
 //终端位置信息上行
 enum data_type
@@ -101,14 +111,14 @@ typedef struct {
 } gps_info;
 
 typedef struct {
-  unsigned char country_code[4];
-  unsigned char mobile_code[4];
+  unsigned int country_code;
+  unsigned int mobile_code;
   unsigned char base_count;
 } AGPS_info;
 
 typedef struct {
-  unsigned char lacN[2];
-  unsigned char cellN[2];
+  unsigned short lacN;
+  unsigned short cellN;
   unsigned char signalN;
 } cell_info;
 
@@ -211,6 +221,17 @@ typedef struct {
 } data_response_alert;
 
 
+// (0x3e)
+typedef struct {
+  unsigned char data_head[2];
+  unsigned char cmd;
+  unsigned short length;
+  unsigned char terminal_id[4];
+  unsigned char tel[7];
+  data_frame_tail data_tail;
+} data_cmd_monitor;
+
+
 #pragma pack()
 
 unsigned int get_product_id(unsigned char * terminal_id );
@@ -220,6 +241,7 @@ double bcd2longitude(unsigned char* bcd, unsigned char* longitude_latitude);
 
 double bcd2longitude1(unsigned char* bcd);
 unsigned char * get_gps_time(unsigned char* bcd, unsigned char* timegps);
+void telephone2bcd( char* bcd, unsigned char *tel);
 
 
 #endif

@@ -86,6 +86,26 @@ unsigned char * get_gps_time(unsigned char* bcd, unsigned char* timegps)
 }
 
 
+void telephone2bcd( char* bcd, unsigned char *tel)
+{
+        char *p = bcd;
+        int count = 0;
+        while(*p != 0x00)
+        {
+
+                if (count == 0){
+                        *tel = ((*p - '0')<<4)|0xf;
+                        count++;
+                }else if (count == 1) {
+                        *tel = (*tel & 0xf0) + (*p - '0') ;
+                        tel ++;
+                        count =0;
+                }
+                p++;
+        }
+
+}
+
 #ifdef _MYDEBUG_
 int main()
 {
@@ -215,6 +235,8 @@ int main()
 
 	return 0;
 }
+
+
 
 #endif
 
